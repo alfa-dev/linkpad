@@ -10,22 +10,43 @@
     html,
     body {
       font-family: 'Trebuchet MS', 'Liberation Sans', 'Nimbus Sans L', sans-serif;
-      color: white;
+      color: #031a2c;
       font-size: 14px;
-      background: -webkit-linear-gradient(#011a2d, #02192b);
     }
+
+    body {
+      background: linear-gradient(to bottom, #f8f9fa 0%,#c0c1c2 100%);
+      height: 100vh;
+    }
+
+    section { text-align: center; }
 
     article {
       display: inline-block;
       margin: 8px;
-      border-radius: 8px;
+      border-radius: 16px;
+      text-align: initial;
+      background: linear-gradient(to bottom, #fff 0%,#f0f0f0 100%);
+
+      box-shadow: 10px 10px 20px 0 rgb(0 0 0 / 12%),
+        -1px -1px 0px 2px inset rgba(255,255,255, .1);
+
+      transition: box-shadow .1s;
+    }
+
+    article:hover {
+      box-shadow: 2px 2px 3px 0 rgb(0 0 0 / 12%),
+        -1px -1px 0px 2px inset rgba(255,255,255, .1);
     }
 
     article a {
       display: block;
+      color: #031a2c;
+      text-decoration: none;
       width: 250px;
       height: 100px;
-      padding: 8px;
+      padding: 16px;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.2), 1px 1px 2px rgba(255,255,255,0.9);
     }
 
     h2 { margin-top: unset; }
@@ -49,39 +70,41 @@
   </section>
 
   <script>
-    var rawLinks = [
-        "https://www.awwwards.com/",
-        "https://www.uplabs.com/",
-        "https://css-tricks.com/"
-      ];
+    LinkPad = {
+      renderLinks: function() {
+        LinkPad.links.forEach(function(link) {
+          var url = new URL(link);
+          var link_box = LinkPad.generateLinkElement(url.href, url.host.replace('www.', ''), url.hostname);
 
-    var colors = ["#3498db", "#27ae60", "#95a5a6"];
+          links_index.appendChild(link_box);
+        });
+      },
 
-    rawLinks.forEach(function(link, index) {
-      var url = new URL(link);
-      var link_box = generateLinkElement(url.href, url.host.replace('www.', ''), url.hostname, colors[index]);
+      generateLinkElement: function(link, title, description) {
+        var templateClone = document.importNode(link_box_template.content, true);
 
-      links_index.appendChild(link_box);
-    });
+        var template = {
+          article:     templateClone.querySelector('article'),
+          a:           templateClone.querySelector('a'),
+          h2:          templateClone.querySelector('h2'),
+          description: templateClone.querySelector('.description'),
+        }
 
-    function generateLinkElement(link, title, description, color) {
-      var templateClone = document.importNode(link_box_template.content, true);
+        template.a.href                = link;
+        template.h2.innerText          = title;
+        template.description.innerText = description;
 
-      var template = {
-        article:     templateClone.querySelector('article'),
-        a:           templateClone.querySelector('a'),
-        h2:          templateClone.querySelector('h2'),
-        description: templateClone.querySelector('.description'),
+        return templateClone;
       }
-
-      template.a.href                = link;
-      template.h2.innerText          = title;
-      template.description.innerText = description;
-
-      template.article.style.backgroundColor = color;
-
-      return templateClone;
     }
+
+    LinkPad.links = [
+      "https://www.awwwards.com/",
+      "https://www.uplabs.com/",
+      "https://css-tricks.com/"
+    ];
+
+    LinkPad.renderLinks();
   </script>
 </body>
 </html>
