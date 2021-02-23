@@ -65,19 +65,24 @@
 
   <section id="links_index">
     <header>
-      <h1>Links</h1>
+      <h1>My Links Pad</h1>
     </header>
   </section>
 
+  <script src="./db.js"></script>
+
   <script>
     LinkPad = {
+      links:[],
       renderLinks: function() {
-        LinkPad.links.forEach(function(link) {
+        LinkPad.links.forEach(LinkPad.renderLink);
+      },
+
+      renderLink: function(link) {
           var url = new URL(link);
           var link_box = LinkPad.generateLinkElement(url.href, url.host.replace('www.', ''), url.hostname);
 
           links_index.appendChild(link_box);
-        });
       },
 
       generateLinkElement: function(link, title, description) {
@@ -98,11 +103,13 @@
       }
     }
 
-    LinkPad.links = [
-      "https://www.awwwards.com/",
-      "https://www.uplabs.com/",
-      "https://css-tricks.com/"
-    ];
+    var db = new DB();
+
+    // LinkPad.links = [
+    //   "https://www.awwwards.com/",
+    //   "https://www.uplabs.com/",
+    //   "https://css-tricks.com/"
+    // ];
 
     LinkPad.renderLinks();
   </script>
