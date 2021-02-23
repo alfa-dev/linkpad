@@ -5,11 +5,35 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+
+  <style>
+    html,
+    body {
+      font-family: 'Trebuchet MS', 'Liberation Sans', 'Nimbus Sans L', sans-serif;
+      color: white;
+      font-size: 14px;
+      background: -webkit-linear-gradient(#011a2d, #02192b);
+    }
+
+    article {
+      display: inline-block;
+      margin: 8px;
+      border-radius: 8px;
+    }
+
+    article a {
+      display: block;
+      width: 250px;
+      height: 100px;
+      padding: 8px;
+    }
+
+    h2 { margin-top: unset; }
+
+  </style>
 </head>
 <body>
-
-
-  <template>
+  <template id="link_box_template">
     <article>
       <a href="http://example.com">
         <h2>Title</h2>
@@ -17,5 +41,47 @@
       </a>
     </article>
   </template>
+
+  <section id="links_index">
+    <header>
+      <h1>Links</h1>
+    </header>
+  </section>
+
+  <script>
+    var rawLinks = [
+        "https://www.awwwards.com/",
+        "https://www.uplabs.com/",
+        "https://css-tricks.com/"
+      ];
+
+    var colors = ["#3498db", "#27ae60", "#95a5a6"];
+
+    rawLinks.forEach(function(link, index) {
+      var url = new URL(link);
+      var link_box = generateLinkElement(url.href, url.host.replace('www.', ''), url.hostname, colors[index]);
+
+      links_index.appendChild(link_box);
+    });
+
+    function generateLinkElement(link, title, description, color) {
+      var templateClone = document.importNode(link_box_template.content, true);
+
+      var template = {
+        article:     templateClone.querySelector('article'),
+        a:           templateClone.querySelector('a'),
+        h2:          templateClone.querySelector('h2'),
+        description: templateClone.querySelector('.description'),
+      }
+
+      template.a.href                = link;
+      template.h2.innerText          = title;
+      template.description.innerText = description;
+
+      template.article.style.backgroundColor = color;
+
+      return templateClone;
+    }
+  </script>
 </body>
 </html>
